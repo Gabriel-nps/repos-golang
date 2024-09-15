@@ -17,12 +17,14 @@ func main() {
 	fmt.Print("Periodo em anos: ")
 	fmt.Scan(&anos)
 
-	fmt.Print("% de retorno: ")
+	fmt.Print("%  de retorno: ")
 	fmt.Scan(&taxaRetorno)
 
 	valorFuturo := montanteInvestido * math.Pow(1+taxaRetorno/100, anos)
 	valorFuturoReal := valorFuturo / math.Pow(1+taxaInflacao/100, anos)
 
-	fmt.Println("Rendimento bruto: R$", valorFuturo)
-	fmt.Println("Rendimento com inflacao: R$", valorFuturoReal)
+	txtValorFuturo := fmt.Sprintf("Rendimento bruto: R$%.1f\n", valorFuturo)
+	txtValorFuturoReal := fmt.Sprintf("Rendimento com inflacao: R$%.1f\n", valorFuturoReal)
+
+	fmt.Print(txtValorFuturo, txtValorFuturoReal)
 }
