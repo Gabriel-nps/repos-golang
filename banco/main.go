@@ -1,38 +1,15 @@
 package main
 
 import (
-	"errors"
 	"fmt"
-	"os"
-	"strconv"
+
+	"example.com/banco/fileops"
 )
 
 const arquivoSaldo = "saldo.txt"
 
-func buscaSaldoEmArquivo() (float64, error) {
-	data, err := os.ReadFile(arquivoSaldo)
-
-	if err != nil {
-		return 1000, errors.New("arquivo de saldo nao encontrado")
-	}
-
-	txtSaldo := string(data)
-	saldo, err := strconv.ParseFloat(txtSaldo, 64)
-
-	if err != nil {
-		return 1000, errors.New("falha em converter o saldo armazenado")
-	}
-
-	return saldo, nil
-}
-
-func escreverSaldoEmArquivo(saldo float64) {
-	txtSaldo := fmt.Sprint(saldo)
-	os.WriteFile(arquivoSaldo, []byte(txtSaldo), 0644)
-}
-
 func main() {
-	var saldoDisponivel, err = buscaSaldoEmArquivo()
+	var saldoDisponivel, err = fileops.BuscaSaldoEmArquivo(arquivoSaldo, 1200)
 	var opcao int
 	var montanteDeposito float64
 	var montanteSaque float64
@@ -43,14 +20,10 @@ func main() {
 		fmt.Println("----------")
 	}
 
-	for {
-		fmt.Println("Bem-vindo ao Banco GOLANG")
-		fmt.Println("O que voce gostaria de fazer?")
+	fmt.Println("Bem-vindo ao Banco GOLANG")
 
-		fmt.Println("1. Conferir saldo")
-		fmt.Println("2. Depositar")
-		fmt.Println("3. Sacar")
-		fmt.Println("4. Sair")
+	for {
+		opcoes()
 		fmt.Print("Digite sua opcao: ")
 		fmt.Scan(&opcao)
 		fmt.Println("Voce escolheu:", opcao)
@@ -69,7 +42,7 @@ func main() {
 
 			saldoDisponivel += montanteDeposito
 			fmt.Println("Saldo atualizado! Novo montante:", saldoDisponivel)
-			escreverSaldoEmArquivo(saldoDisponivel)
+			fileops.EscreverSaldoEmArquivo(saldoDisponivel, arquivoSaldo)
 		case 3:
 			fmt.Print("Sacar: ")
 
@@ -87,7 +60,7 @@ func main() {
 
 			saldoDisponivel -= montanteSaque
 			fmt.Println("Saldo atualizado! Novo montante:", saldoDisponivel)
-			escreverSaldoEmArquivo(saldoDisponivel)
+			fileops.EscreverSaldoEmArquivo(saldoDisponivel, arquivoSaldo)
 		default:
 			fmt.Println("Até logo!")
 			fmt.Println("Obrigado por escolher o Banco GOLANG")
